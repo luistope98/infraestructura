@@ -79,7 +79,7 @@ workflows:
       - request-testing:
           type: approval
           requires:
-            - deployDevelopment
+            - deployToDev
             - test
 
   
