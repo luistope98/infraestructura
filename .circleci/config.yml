@@ -11,7 +11,6 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run: yarn install
-
       - save_cache:
           paths:
             - node_modules
@@ -51,6 +50,30 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+  deployToNFS:
+    docker:
+      - image: circleci/node:8.10
+    working_directory: ~/repo
+    steps:
+      - add_ssh_keys:
+            fingerprints:
+              - 2f:3c:b6:6e:64:eb:f6:df:7b:a9:f3:a9:b9:6d:d5:11
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn run build
+      - run: scp -o StrictHostKeyChecking=no -r ./build/* ec2-34-239-113-190.compute-1.amazonaws.com:/mnt/sharedfolder
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-54-227-233-152.compute-1.amazonaws.com 'sudo service apache2 restart'
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-54-221-135-83.compute-1.amazonaws.com 'sudo service apache2 restart'
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-82-99-158.compute-1.amazonaws.com 'sudo service nginx restart'
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+    
 
 workflows:
   version: 2
@@ -81,6 +104,14 @@ workflows:
           requires:
             - deployToDev
             - test
+      - deployToNFS:
+          requires:
+            - request-testing
+          filters:
+            branches:
+              only:
+                - master
+
 
   
 
