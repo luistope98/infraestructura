@@ -1,0 +1,87 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  test:
+    docker:
+      - image: circleci/node:8.10
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn run test
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  deployToDev:
+    docker:
+      - image: circleci/node:8.10
+    working_directory: ~/repo
+    steps:
+      - add_ssh_keys:
+            fingerprints:
+              - 2f:3c:b6:6e:64:eb:f6:df:7b:a9:f3:a9:b9:6d:d5:11
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn run build
+      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-35-172-133-213.compute-1.amazonaws.com:/var/www/html
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+workflows:
+  version: 2
+  normal_run:
+    jobs:
+      - build: 
+          filters:
+            branches:
+              only:
+                - master
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - deployToDev:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                - master
+      - request-testing:
+          type: approval
+          requires:
+            - deployDevelopment
+            - test
+
+  
+
+      
