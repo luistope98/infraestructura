@@ -64,10 +64,10 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run: yarn run build
-      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-34-239-113-190.compute-1.amazonaws.com:/mnt/sharedfolder
-      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-54-227-233-152.compute-1.amazonaws.com 'sudo service apache2 restart'
-      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-54-221-135-83.compute-1.amazonaws.com 'sudo service apache2 restart'
-      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-82-99-158.compute-1.amazonaws.com 'sudo service nginx restart'
+      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-52-90-220-139.compute-1.amazonaws.com:/mnt/sharedfolder
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-35-173-233-129.compute-1.amazonaws.com 'sudo service apache2 restart'
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-90-155-110.compute-1.amazonaws.com 'sudo service apache2 restart'
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-87-207-39.compute-1.amazonaws.com'sudo service nginx restart'
 
       - save_cache:
           paths:
