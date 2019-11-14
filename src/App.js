@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          dylan las mejores
+          lucho
         </a>
       </header>
     </div>
