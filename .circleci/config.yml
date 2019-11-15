@@ -37,14 +37,14 @@ jobs:
     steps:
       - add_ssh_keys:
             fingerprints:
-              - 2f:3c:b6:6e:64:eb:f6:df:7b:a9:f3:a9:b9:6d:d5:11
+              - 35:3f:1a:4f:50:b4:00:a4:36:79:da:41:44:06:6e:7c
       - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run: yarn run build
-      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-35-172-133-213.compute-1.amazonaws.com:/var/www/html
+      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-54-196-34-99.compute-1.amazonaws.com:/var/www/html
 
       - save_cache:
           paths:
@@ -57,17 +57,17 @@ jobs:
     steps:
       - add_ssh_keys:
             fingerprints:
-              - 2f:3c:b6:6e:64:eb:f6:df:7b:a9:f3:a9:b9:6d:d5:11
+              - 35:3f:1a:4f:50:b4:00:a4:36:79:da:41:44:06:6e:7c
       - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       - run: yarn run build
-      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-52-90-220-139.compute-1.amazonaws.com:/mnt/sharedfolder
-      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-35-173-233-129.compute-1.amazonaws.com 'sudo service apache2 restart'
-      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-90-155-110.compute-1.amazonaws.com 'sudo service apache2 restart'
-      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-87-207-39.compute-1.amazonaws.com 'sudo service nginx restart'
+      - run: scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@ec2-3-94-81-82.compute-1.amazonaws.com:/mnt/sharedfolder
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-54-81-68-200.compute-1.amazonaws.com 'sudo service apache2 restart'
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-231-148-96.compute-1.amazonaws.com 'sudo service apache2 restart'
+      - run: ssh -o StrictHostKeyChecking=no ubuntu@ec2-54-90-119-157.compute-1.amazonaws.com 'sudo service nginx restart'
 
       - save_cache:
           paths:
