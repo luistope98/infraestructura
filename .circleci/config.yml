@@ -84,17 +84,11 @@ workflows:
             branches:
               only:
                 - master
-      - test:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - master
+      
       - deployToDev:
           requires:
             - build
-            - test
+            
           filters:
             branches:
               only:
@@ -103,7 +97,7 @@ workflows:
           type: approval
           requires:
             - deployToDev
-            - test
+            
       - deployToNFS:
           requires:
             - request-testing
