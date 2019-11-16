@@ -16,12 +16,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          dylan y eri y luis
+          un 5
 
         </a>
       </header>
     </div>
-    asdasdasd
+    
 
   );
 }
