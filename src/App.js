@@ -16,7 +16,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          eri las mejores
+          puli
         </a>
       </header>
     </div>
