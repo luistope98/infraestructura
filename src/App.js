@@ -16,10 +16,12 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          puli
+          dylan y eri
+          
         </a>
       </header>
     </div>
+    
 
   );
 }
